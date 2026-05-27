@@ -14,8 +14,8 @@ import {
 } from '../types/order';
 
 const API_BASE =
-  import.meta.env.VITE_API_URL?.replace(/\/$/, '') ||
-  'http://localhost:8000/api';
+  import.meta.env.VITE_API_URL ||
+  'http://localhost:3000';
 
 class OrderService {
 
@@ -23,7 +23,7 @@ class OrderService {
    * Get authentication headers
    */
   private getAuthHeader(): HeadersInit {
-    const token = localStorage.getItem('auth_token');
+    const token = localStorage.getItem('authToken');
 
     return {
       'Content-Type': 'application/json',

@@ -1,5 +1,5 @@
-// Simple API client for communicating with Laravel backend
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+// Simple API client for communicating with NestJS backend
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export class ApiClient {
   private token: string | null = null;
@@ -66,13 +66,12 @@ export class ApiClient {
 
   // Auth endpoints
   async register(name: string, email: string, password: string, phone?: string) {
-    const { data } = await this.request('/register', {
+    const { data } = await this.request('/auth/register', {
       method: 'POST',
       body: JSON.stringify({
         name,
         email,
         password,
-        password_confirmation: password,
         phone_number: phone,
       }),
     });
@@ -80,7 +79,7 @@ export class ApiClient {
   }
 
   async login(email: string, password: string) {
-    const { data } = await this.request('/login', {
+    const { data } = await this.request('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
@@ -89,7 +88,7 @@ export class ApiClient {
 
   async logout() {
     try {
-      await this.request('/logout', { method: 'POST' });
+      await this.request('/auth/logout', { method: 'POST' });
     } catch (error) {
       console.error('Logout error:', error);
     }
@@ -97,7 +96,7 @@ export class ApiClient {
   }
 
   async getUser() {
-    const { data } = await this.request('/user');
+    const { data } = await this.request('/auth/user');
     return data;
   }
 
@@ -166,37 +165,6 @@ export class ApiClient {
         ...(paymentStatus && { payment_status: paymentStatus }),
       }),
     });
-    return data;
-  }
-
-  async getAdminCustomers(params?: Record<string, any>) {
-    const query = new URLSearchParams();
-    if (params) {
-      Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          query.append(key, String(value));
-        }
-      });
-    }
-    const { data } = await this.request(`/admin/customers?${query}`);
-    return data;
-  }
-
-  async getCustomerDetail(customerId: string) {
-    const { data } = await this.request(`/admin/customers/${customerId}`);
-    return data;
-  }
-
-  async getAdminUsers(params?: Record<string, any>) {
-    const query = new URLSearchParams();
-    if (params) {
-      Object.entries(params).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) {
-          query.append(key, String(value));
-        }
-      });
-    }
-    const { data } = await this.request(`/admin/users?${query}`);
     return data;
   }
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { apiClient } from '../services/apiClient';
 import { toast } from 'sonner';
 import { Phone, MapPin, Package, DollarSign } from 'lucide-react';
 
@@ -52,35 +53,23 @@ export function Checkout() {
         items: cart.map(item => ({
           product_id: item.product.id,
           quantity: item.quantity,
+          price: item.product.price,
         })),
         customer_name: formData.customer_name,
         phone_number: formData.phone_number,
         delivery_address: formData.delivery_address,
-        message: formData.message || null,
+        message: formData.message || undefined,
         payment_method: formData.payment_method,
+        total_amount: total,
       };
 
-      // Call backend API
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('auth_token')}`,
-        },
-        body: JSON.stringify(orderData),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to place order');
-      }
-
-      const result = await response.json();
+      // Call backend API using apiClient
+      const result = await apiClient.createOrder(orderData);
 
       // Clear cart and show success
       clearCart();
       toast.success('Order placed successfully! 🎉');
-      navigate(`/orders/${result.order.id}`);
+      navigate(`/orders/${result.id}`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'Failed to place order');
     } finally {

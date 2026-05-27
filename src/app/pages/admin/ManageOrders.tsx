@@ -17,6 +17,7 @@ import {
   CreditCard,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { apiClient } from '../../services/apiClient';
 import { toast } from 'sonner';
 
 interface Order {
@@ -97,33 +98,18 @@ export function ManageOrders() {
     setLoading(true);
 
     try {
-      const token = localStorage.getItem('auth_token');
-
       const statusParam =
         statusFilter !== 'all'
-          ? `&order_status=${statusFilter}`
-          : '';
+          ? statusFilter
+          : undefined;
 
-      const searchParam = searchQuery
-        ? `&search=${encodeURIComponent(searchQuery)}`
-        : '';
+      const result = await apiClient.getAdminOrders({
+        order_status: statusParam,
+        search: searchQuery || undefined,
+        per_page: 20,
+      });
 
-      const response = await fetch(
-        `/api/admin/orders?per_page=20${statusParam}${searchParam}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch orders');
-      }
-
-      const data = await response.json();
-
-      setOrders(data.data || data || []);
+      setOrders(result.data || result || []);
     } catch (error) {
       console.error(error);
       toast.error('Failed to load orders');
@@ -135,18 +121,8 @@ export function ManageOrders() {
 
   const loadStats = async () => {
     try {
-      const token = localStorage.getItem('auth_token');
-
-      const response = await fetch('/api/admin/orders/stats', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setStats(data);
-      }
+      const stats = await apiClient.getAdminOrderStats();
+      setStats(stats);
     } catch (error) {
       console.error(error);
     }
@@ -159,25 +135,7 @@ export function ManageOrders() {
     setUpdatingStatus(true);
 
     try {
-      const token = localStorage.getItem('auth_token');
-
-      const response = await fetch(
-        `/api/admin/orders/${orderId}/status`,
-        {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            order_status: newStatus,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to update');
-      }
+      const result = await apiClient.updateOrderStatus(orderId, newStatus);
 
       toast.success('Order status updated');
 
