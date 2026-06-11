@@ -48,18 +48,32 @@ export class UpdateOrderStatusDto {
   order_status: string;
 }
 
+
 export class OrderResponseDto {
   id: string;
   user_id: string;
   customer_name: string;
   phone_number?: string;
   delivery_address?: string;
+
   total_amount: number;
+
+  // 75% advance workflow
+  advance_amount: number;
+  remaining_amount: number;
+  paid_amount: number;
+  payment_percentage: number;
+
   order_status: string;
   payment_status: string;
   payment_method?: string;
+  payment_proof_url?: string;
+  advance_paid_at?: Date;
+  fully_paid_at?: Date;
+
   message?: string;
   items: OrderItemDto[];
   createdAt: Date;
   updatedAt: Date;
 }
+

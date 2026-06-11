@@ -29,9 +29,11 @@ export function AdminDashboard() {
     });
   }, []);
 
-  if (!user || user.role !== 'admin') {
-    return <Navigate to="/" replace />;
+  if (!user || (user.role !== 'admin' && user.role !== 'super_admin')) {
+    return <Navigate to="/login" replace />;
   }
+
+
 
   return (
     <div className="min-h-screen bg-gray-50">

@@ -18,10 +18,13 @@ export const AdminSidebar: React.FC = () => {
 
   const navItems = [
     { path: '/admin/dashboard', label: 'Dashboard', icon: BarChart3 },
+    { path: '/admin/products', label: 'Products', icon: Package },
+    { path: '/admin/categories', label: 'Categories', icon: Users },
     { path: '/admin/orders', label: 'Orders', icon: Package },
     { path: '/admin/customers', label: 'Customers', icon: Users },
     { path: '/', label: 'Back to Store', icon: Home },
   ];
+
 
   return (
     <aside className="w-64 bg-gray-900 text-white min-h-screen">

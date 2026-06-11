@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { mockProducts, categories } from '../data/mockData';
 import { ProductCard } from '../components/ProductCard';

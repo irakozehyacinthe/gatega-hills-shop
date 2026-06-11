@@ -1,7 +1,12 @@
 import { useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, ShoppingCart, Minus, Plus } from 'lucide-react';
 import { mockProducts } from '../data/mockData';
+
+function formatRwf(amount: number) {
+  return `${Math.round(amount).toLocaleString('en-RW')} RWF`;
+}
+
 import { useCart } from '../context/CartContext';
 import { toast } from 'sonner';
 
@@ -65,14 +70,25 @@ export function ProductDetails() {
         <div className="bg-white rounded-xl shadow-md overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-8">
 
-            {/* Product Image */}
+            {/* Product Gallery */}
             <div>
+              <div className="flex gap-4 mb-4 overflow-x-auto pb-2">
+                {(product.images?.length ? product.images : [product.image]).slice(0, 6).map((img, idx) => (
+                  <img
+                    key={idx}
+                    src={img}
+                    alt={`${product.name} image ${idx + 1}`}
+                    className="w-20 h-20 object-cover rounded-lg border border-gray-200"
+                  />
+                ))}
+              </div>
               <img
-                src={product.image}
+                src={(product.images?.length ? product.images : [product.image])[0]}
                 alt={product.name}
                 className="w-full h-96 object-cover rounded-xl shadow-sm"
               />
             </div>
+
 
             {/* Product Info */}
             <div className="space-y-6">
@@ -93,9 +109,10 @@ export function ProductDetails() {
 
               {/* Price */}
               <div className="bg-blue-50 p-6 rounded-xl border border-blue-200">
-                <div className="text-5xl font-bold text-blue-600 mb-3">
-                  ${product.price.toFixed(2)}
+            <div className="text-5xl font-bold text-blue-600 mb-3">
+                  {formatRwf(typeof product.discountPrice === 'number' ? product.discountPrice : product.price)}
                 </div>
+
 
                 <div className="text-sm">
                   {product.stock > 0 ? (
@@ -181,6 +198,28 @@ export function ProductDetails() {
                   </div>
 
                   <div className="flex justify-between">
+                    <span>Brand:</span>
+                    <span className="font-semibold text-gray-800">
+                      {product.brand}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>SKU:</span>
+                    <span className="font-semibold text-gray-800">
+                      {product.sku}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <span>Rating:</span>
+                    <span className="font-semibold text-gray-800">
+                      {product.rating.toFixed(1)} ★
+                    </span>
+                  </div>
+
+
+                  <div className="flex justify-between">
                     <span>Product ID:</span>
                     <span className="font-semibold text-gray-800">
                       {product.id}
@@ -188,11 +227,21 @@ export function ProductDetails() {
                   </div>
 
                   <div className="flex justify-between">
-                    <span>Price:</span>
-                    <span className="font-semibold text-blue-600">
-                      ${product.price.toFixed(2)}
+                    <span>Original Price:</span>
+                    <span className="font-semibold text-gray-600">
+                      {formatRwf(product.price)}
                     </span>
                   </div>
+
+                  {typeof product.discountPrice === 'number' && product.discountPrice < product.price ? (
+                    <div className="flex justify-between">
+                      <span>Discount Price:</span>
+                      <span className="font-semibold text-blue-700">
+                        {formatRwf(product.discountPrice)}
+                      </span>
+                    </div>
+                  ) : null}
+
 
                   <div className="flex justify-between">
                     <span>Availability:</span>

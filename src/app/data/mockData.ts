@@ -14,13 +14,29 @@ export interface User {
 export interface Product {
   id: string;
   name: string;
-  description: string;
-  price: number;
-  image: string;
   category: string;
+  brand: string;
+  sku: string;
+
+  shortDescription: string;
+  description: string;
+
+  price: number; // Original price (RWF)
+  discountPrice?: number; // Discount price (RWF)
+
   stock: number;
+  rating: number; // 0-5
+
+  image: string;
+  images: string[];
+
+  isFeatured: boolean;
+  isBestSeller: boolean;
+  isNewArrival: boolean;
+
   created_at: string;
 }
+
 
 export interface CartItem {
   id: string;

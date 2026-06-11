@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserPlus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
@@ -31,8 +31,9 @@ export function Register() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
 
     // ❌ Block admin account registration
     if (formData.email === 'admin@gategahills.com') {
@@ -52,18 +53,16 @@ export function Register() {
       return;
     }
 
-    const success = register(
-      formData.name,
-      formData.email,
-      formData.password,
-      formData.phone,
-      formData.address
-    );
-
-    if (success) {
+    try {
+      await register(
+        formData.name,
+        formData.email,
+        formData.password,
+        formData.phone,
+      );
       toast.success('Account created successfully! Welcome!');
       navigate('/');
-    } else {
+    } catch {
       toast.error('Email already exists');
     }
   };

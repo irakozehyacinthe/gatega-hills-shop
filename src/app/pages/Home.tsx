@@ -2,14 +2,25 @@ import { Link } from 'react-router';
 import { ArrowRight, Truck, Shield, Clock, Zap, TrendingUp, Package } from 'lucide-react';
 import { mockProducts, categories } from '../data/mockData';
 import { ProductCard } from '../components/ProductCard';
+import {
+  getBestSellerProducts,
+  getDiscountedProducts,
+  getFeaturedProducts,
+  getFlashSaleProducts,
+  getNewArrivalProducts,
+  getPopularProducts,
+  getRecommendedProducts,
+} from '../utils/productCatalog';
 
 export function Home() {
-  // Get featured products (first 8)
-  const featuredProducts = mockProducts.slice(0, 8);
-  // Get best sellers (random selection)
-  const bestSellers = mockProducts.slice(10, 18);
-  // Get new arrivals
-  const newArrivals = mockProducts.slice(20, 28);
+  const featuredProducts = getFeaturedProducts(mockProducts).slice(0, 8);
+  const bestSellers = getBestSellerProducts(mockProducts).slice(0, 8);
+  const newArrivals = getNewArrivalProducts(mockProducts).slice(0, 8);
+  const flashSaleProducts = getFlashSaleProducts(mockProducts).slice(0, 8);
+  const discountedProducts = getDiscountedProducts(mockProducts).slice(0, 8);
+  const popularProducts = getPopularProducts(mockProducts);
+  const recommendedProducts = getRecommendedProducts(mockProducts);
+
 
   return (
     <div>
@@ -96,6 +107,7 @@ export function Home() {
 
       {/* Featured Products Section */}
       <section className="py-20 bg-white">
+
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center mb-12">
             <div>
@@ -144,6 +156,7 @@ export function Home() {
 
       {/* New Arrivals Section */}
       <section className="py-20 bg-white">
+
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center mb-12">
             <div>
@@ -166,8 +179,101 @@ export function Home() {
         </div>
       </section>
 
+      {/* Flash Sale Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center mb-12">
+            <div>
+              <h2 className="text-4xl font-bold text-gray-800">Flash Sale</h2>
+              <p className="text-gray-600 mt-2">Limited-time discounts</p>
+            </div>
+            <Link
+              to="/products"
+              className="text-green-600 hover:text-green-800 font-bold flex items-center gap-2 bg-green-50 px-4 py-2 rounded-lg hover:bg-green-100 transition"
+            >
+              View All <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {flashSaleProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Discounted Products Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center mb-12">
+            <div>
+              <h2 className="text-4xl font-bold text-gray-800">Discounted Products</h2>
+              <p className="text-gray-600 mt-2">Save more on your favorites</p>
+            </div>
+            <Link
+              to="/products"
+              className="text-green-600 hover:text-green-800 font-bold flex items-center gap-2 bg-green-50 px-4 py-2 rounded-lg hover:bg-green-100 transition"
+            >
+              View All <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {discountedProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Popular Products Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center mb-12">
+            <div>
+              <h2 className="text-4xl font-bold text-gray-800">Popular Products</h2>
+              <p className="text-gray-600 mt-2">Top rated picks</p>
+            </div>
+            <Link
+              to="/products"
+              className="text-green-600 hover:text-green-800 font-bold flex items-center gap-2 bg-green-50 px-4 py-2 rounded-lg hover:bg-green-100 transition"
+            >
+              View All <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {popularProducts.slice(0, 8).map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Recommended Products Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center mb-12">
+            <div>
+              <h2 className="text-4xl font-bold text-gray-800">Recommended</h2>
+              <p className="text-gray-600 mt-2">Smart picks for you</p>
+            </div>
+            <Link
+              to="/products"
+              className="text-green-600 hover:text-green-800 font-bold flex items-center gap-2 bg-green-50 px-4 py-2 rounded-lg hover:bg-green-100 transition"
+            >
+              View All <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {recommendedProducts.slice(0, 8).map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-green-600 to-green-500 text-white py-20">
+
         <div className="max-w-4xl mx-auto px-4 text-center">
           <Zap className="w-12 h-12 mx-auto mb-4 animate-pulse" />
           <h2 className="text-4xl font-bold mb-4">Special Offers & Promotions</h2>

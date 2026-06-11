@@ -7,10 +7,13 @@ export interface User {
   name: string;
   email: string;
   phone_number?: string;
-  role: 'user' | 'admin';
+  role: 'user' | 'admin' | 'super_admin';
+
+  // legacy flags (some parts of UI use this)
   is_admin?: boolean;
   created_at?: string;
 }
+
 
 interface AuthContextType {
   user: User | null;
@@ -122,7 +125,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     user,
     loading,
     isAuthenticated: !!user,
-    isAdmin: user?.role === 'admin' || user?.is_admin === true,
+    isAdmin:
+      user?.role === 'admin' ||
+      user?.role === 'super_admin' ||
+      user?.is_admin === true,
+
     login,
     register,
     logout,

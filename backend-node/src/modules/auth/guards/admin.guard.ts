@@ -10,9 +10,11 @@ export class AdminGuard implements CanActivate {
       throw new ForbiddenException('User not authenticated');
     }
 
-    if (user.role !== 'admin') {
+    const allowed = ['admin', 'super_admin'];
+    if (!allowed.includes(user.role)) {
       throw new ForbiddenException('Access denied. Admin role required.');
     }
+
 
     return true;
   }

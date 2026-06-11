@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { LogIn } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -6,7 +7,8 @@ import { toast } from 'sonner';
 
 export function Login() {
   const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
+
 
   const [formData, setFormData] = useState({
     email: '',
@@ -41,7 +43,25 @@ export function Login() {
       );
 
       toast.success('Login successful!');
-      navigate('/');
+
+      // Redirect based on authenticated user's role (from AuthContext)
+      const role = user?.role;
+
+
+
+
+
+
+
+
+      if (role === 'admin' || role === 'super_admin') {
+
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
+
+
 
     } catch (error) {
       toast.error('Invalid email or password');

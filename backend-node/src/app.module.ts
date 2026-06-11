@@ -7,6 +7,9 @@ import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
 import { OrdersModule } from './modules/orders/orders.module';
 
+import { SuperAdminSeed } from './common/seed/super-admin.seed';
+
+
 import { User, UserSchema } from './common/schemas/user.schema';
 import { Category, CategorySchema } from './common/schemas/category.schema';
 import { Product, ProductSchema } from './common/schemas/product.schema';
@@ -36,6 +39,6 @@ import { Order, OrderSchema } from './common/schemas/order.schema';
     OrdersModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [SuperAdminSeed],
 })
 export class AppModule {}
